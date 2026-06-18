@@ -1,9 +1,11 @@
 import React from 'react'
 import {Button} from "@/components/ui/button"
-const page = () => {
+import prisma from "@/lib/db"
+const page = async() => {
+  const user = await prisma.user.findMany();
   return (
     <div className='flex justify-center items-center min-w-screen min-h-screen'>
-      <Button>Click me</Button>
+     {JSON.stringify(user)}
     </div>
   )
 }
