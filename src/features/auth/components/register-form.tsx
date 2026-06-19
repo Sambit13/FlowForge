@@ -26,39 +26,48 @@ import {
 import { Input } from "@/components/ui/input";
 import { authClient } from "@/lib/auth-client";
 
-const loginSchema = z.object({
+const registerSchema = z.object({
     email: z.email("Please enter a valid email address"),
-    password: z.string().min(1,"Password is required")
+    password: z.string().min(1,"Password is required"),
+    confirmPassword: z.string(),
 })
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+.refine((data) => data.password === data.confirmPassword, {
+    message: "Password don't match",
+    path: ["confirmPassword"]
+});
 
-export function LoginForm(){
+//localhost:3000/signup
+type RegisterFormValues = z.infer<typeof registerSchema>;
+
+export function RegisterForm(){
     const router = useRouter();
-    const form = useForm<LoginFormValues>({
-        resolver: zodResolver(loginSchema),
+    const form = useForm<RegisterFormValues>({
+        resolver: zodResolver(registerSchema),
         defaultValues:{
             email:"",
-            password:""
+            password:"",
+            confirmPassword:""
         },
     });
 
-    const onSubmit = async(values: LoginFormValues)=>{
-        await authClient.signIn.email(
+    const onSubmit = async(values: RegisterFormValues)=>{
+        await authClient.signUp.email(
             {
-            email: values.email,
-            password: values.password,
-            callbackURL:"/",
+                name: values.email,
+                email: values.email,
+                password: values.password,
+                callbackURL: '/'
             },
-        {
-            onSuccess: () => {
-                router.push("/");
-            },
-            onError: (ctx)=>{
-                toast.error(ctx.error.message);
+            {
+                onSuccess:() =>{
+                    router.push("/");
+                },
+                onError:(ctx)=>{
+                    toast.error(ctx.error.message);
+                }
             }
-        }
-    )
+        )
     };
 
     const isPending = form.formState.isSubmitting;
@@ -68,10 +77,10 @@ export function LoginForm(){
             <Card className="w-full max-w-md ">
                 <CardHeader className="text-center">
                     <CardTitle>
-                        Welcome back
+                        Get Started
                     </CardTitle>
                     <CardDescription>
-                        Login to continue
+                        Create your account to get started
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -134,14 +143,32 @@ export function LoginForm(){
                                         
                                     )}
                                     />
+                                    <FormField
+                                    control={form.control}
+                                    name="confirmPassword"
+                                    render={({ field }) =>(
+                                        <FormItem>
+                                            <FormLabel>Confirm Password</FormLabel>
+                                            <FormControl>
+                                                <Input 
+                                                type="password"
+                                                placeholder="********"
+                                                {...field}
+                                                />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                        
+                                    )}
+                                    />
                                     <Button type="submit" className="w-full" disabled={isPending}>
-                                        Log in
+                                        Sign up
                                     </Button>
                                 </div>
                                 <div className="text-center text-sm">
-                                    Don&apos;t have an account?{" "}
-                                    <Link href="/signup" className="underline underline-offset-4">
-                                    Sign up
+                                    Already have an account?{" "}
+                                    <Link href="/login" className="underline underline-offset-4">
+                                    Login
                                     </Link>
                                 </div>
                             </div>
