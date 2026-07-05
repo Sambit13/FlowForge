@@ -1,18 +1,34 @@
+import { prefetchWorkflow } from "@/features/workflows/server/prefetch";
 import { requireAuth } from "@/lib/auth-utils";
+import { HydrateClient } from "@/trpc/server";
+import { ErrorBoundary } from "react-error-boundary";
+import { Suspense } from "react";
+import { Editor, EditorError, EditorLoading } from "@/features/editor/components/editor";
+import { EditorHeader } from "@/features/editor/components/editor-header";
 
-interface PageProps{
-    params:Promise<{
-        workflowId: string;
-    }>
+interface PageProps {
+  params: Promise<{
+    workflowId: string;
+  }>;
 }
 
 //localhost:3000/executions/123
-const page = async ({params} : PageProps) => {
-    await requireAuth();
-    const {workflowId} = await params;
+const page = async ({ params }: PageProps) => {
+  await requireAuth();
+  const { workflowId } = await params;
+  prefetchWorkflow(workflowId);
   return (
-    <div>Workflow id:{workflowId} </div>
-  )
-}
+    <HydrateClient>
+      <ErrorBoundary fallback={<EditorError/>}>
+        <Suspense fallback={<EditorLoading/>}>
+        <EditorHeader workflowId={workflowId} />
+        <main className="flex-1">
+        <Editor workflowId={workflowId} />
+        </main>
+        </Suspense>
+      </ErrorBoundary>
+    </HydrateClient>
+  );
+};
 
-export default page
+export default page;
