@@ -21,6 +21,8 @@ import {
 import '@xyflow/react/dist/style.css';
 import { nodeComponents } from '@/config/node-component';
 import { AddNodeButton } from './add-node-button';
+import { useSetAtom } from 'jotai';
+import { editorAtom } from '../store/atoms';
 
 
 export const EditorLoading = () => {
@@ -39,6 +41,8 @@ export const Editor = ({
   const { 
     data: workflow 
 } = useSuspenseWorkflow(workflowId);
+
+const setEditor = useSetAtom(editorAtom)
 
 
     const [nodes, setNodes] = useState<Node[]>
@@ -68,7 +72,13 @@ export const Editor = ({
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             nodeTypes={nodeComponents}
+            onInit={setEditor}
             fitView
+            snapGrid={[10,10]}
+            snapToGrid
+            panOnScroll
+            panOnDrag={false}
+            selectionOnDrag
          >
             <Background/>
             <Controls/>
