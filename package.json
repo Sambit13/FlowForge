@@ -7,9 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "biome check",
+    "ngrok:dev": "dotenv -- ngrok http --url=%NGROK_URL% 3000",
     "format": "biome format --write",
     "inngest:dev": "inngest-cli dev",
-    "dev:all": "mprocs"
+    "dev:all": "dotenv -- mprocs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^4.0.0",
@@ -71,6 +72,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "dotenv-cli": "^10.0.0",
     "inngest-cli": "^1.12.1",
     "mprocs": "^0.7.3",
     "shadcn": "^4.11.0",
