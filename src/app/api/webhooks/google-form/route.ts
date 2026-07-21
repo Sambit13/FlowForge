@@ -35,7 +35,12 @@ export async function POST(request: NextRequest) {
         initialData: {
             googleForm: formData,
         }
-    })
+    });
+
+    return NextResponse.json(
+      { success: true },
+      { status:200 }
+    );
 
 
 
