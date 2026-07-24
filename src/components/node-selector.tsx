@@ -52,6 +52,24 @@ const executionNodes: NodeTypeOption[] = [
     description: "Makes an HTTP request",
     icon: GlobeIcon,
   },
+  {
+    type: NodeType.GEMINI,
+    label: "Gemini",
+    description: "Use Google Gemini to generate text",
+    icon: "/logos/gemini.svg",
+  },
+  {
+    type: NodeType.OPENAI,
+    label: "OpenAI",
+    description: "Use OpenAI to generate text",
+    icon: "/logos/openai.svg",
+  },
+   {
+    type: NodeType.ANTHROPIC,
+    label: "Anthropic",
+    description: "Use Anthropic to generate text",
+    icon: "/logos/anthropic.svg",
+  },
 ];
 
 interface NodeSelectorProps {
@@ -70,7 +88,7 @@ export function NodeSelector({
 
     const handleNodeSelect = useCallback((selection: NodeTypeOption) => {
 
-        //Check if trying to add manual trigger when one alredy exist
+        //Check if trying to add manual trigger when one already exist
         if(selection.type === NodeType.MANUAL_TRIGGER){
             const nodes = getNodes();
             const hasManualTrigger = nodes.some(
