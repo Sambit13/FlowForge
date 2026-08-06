@@ -52,20 +52,6 @@ If you have an idea...
 
 ---
 
-# 🎬 Demo
-
-> Add screenshots or GIFs here
-
-```
-📸 Workflow Builder
-
-📸 Execution Dashboard
-
-📸 Credentials Management
-
-📸 AI Workflow Example
-```
-
 ---
 
 # ✨ Features
